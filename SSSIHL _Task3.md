@@ -1,19 +1,142 @@
-# Unique 32-bit Instructions Extracted
+**Week - 3**
 
-| Instruction Code | Description                                                                 |
-|------------------|-----------------------------------------------------------------------------|
-| 00000517         | Load Upper Immediate (LUI): Load a 20-bit constant into the upper 20 bits of a register. |
-| 00000593         | Add Immediate (ADDI): Add an immediate value to a register.               |
-| 00008067         | Return (RET): Return from a function or jump to an address in a register.  |
-| 00012503         | Load Word (LW): Load a 32-bit word from memory into a register.           |
-| 00013197         | Add Upper Immediate to PC (AUIPC): Add a 20-bit immediate value to the PC.|
-| 00013617         | Add Immediate to GP: Similar to ADDI but specific to the global pointer.  |
-| 00021537         | Load Upper Immediate (LUI): Load a 20-bit constant into the upper 20 bits of a register. |
-| 00050413         | Subtract (SUB): Subtract one register from another.                       |
-| 00050593         | Logical Shift Left (SLL): Shift a register's value left by a specified amount. |
-| 00078863         | Branch Equal (BEQ): Branch to a specified address if two registers are equal. |
-| 00113423         | Store Word (SW): Store a 32-bit word from a register to memory.           |
-| 00500593         | Add Immediate (ADDI): Add an immediate value to a register.               |
-| 00810593         | Add Immediate (ADDI): Add an immediate value to a register.               |
-| 00813023         | Store Word (SW): Store a 32-bit word from a register to memory.           |
-| 00813083         | Load Word (LW): Load a 32-bit word from memory into a register.           |
+
+# Binary Breakdown of Instructions
+
+## 1. `beqz a5, 1017c`
+**Hex:** `0x02078863`  
+**Binary:** `0000 0010 0000 0111 1000 1000 0110 0011`  
+**Breakdown:**  
+- Immediate: `0000 0010 000` (split for B-type)  
+- RS1: `00111` (a5)  
+- RS2: `00000`  
+- Funct3: `000`  
+- Opcode: `1100011`
+
+## 2. `addi sp, sp, -16`
+**Hex:** `0xff010113`  
+**Binary:** `1111 1111 0000 0001 0000 0001 0001 0011`  
+**Breakdown:**  
+- Immediate: `1111 1111 0000`  
+- RS1: `00010` (sp)  
+- RD: `00010` (sp)  
+- Funct3: `000`  
+- Opcode: `0010011`
+
+## 3. `jal ra, 10408`
+**Hex:** `0x26c000ef`  
+**Binary:** `0010 0110 1100 0000 0000 0000 1110 1111`  
+**Breakdown:**  
+- Immediate: `0010 0110 1100 0000 000`  
+- RD: `00001` (ra)  
+- Opcode: `1101111`
+
+## 4. `lw a0, 0(sp)`
+**Hex:** `0x00012503`  
+**Binary:** `0000 0000 0000 0001 0010 0101 0000 0011`  
+**Breakdown:**  
+- Immediate: `0000 0000 0000`  
+- RS1: `00010` (sp)  
+- RD: `00010` (a0)  
+- Funct3: `010`  
+- Opcode: `0000011`
+
+## 5. `sd ra, 8(sp)`
+**Hex:** `0x00813023`  
+**Binary:** `0000 0000 1000 0001 0011 0000 0010 0011`  
+**Breakdown:**  
+- Immediate: `0000 0000 1000`  
+- RS1: `00010` (sp)  
+- RS2: `00001` (ra)  
+- Funct3: `011`  
+- Opcode: `0100011`
+
+## 6. `li a0, 0`
+**Hex:** `0x00000513`  
+**Binary:** `0000 0000 0000 0000 0000 0101 0001 0011`  
+**Breakdown:**  
+- Immediate: `0000 0000 0000`  
+- RS1: `00000`  
+- RD: `00010` (a0)  
+- Funct3: `000`  
+- Opcode: `0010011`
+
+## 7. `lui a1, 0x21`
+**Hex:** `0x02100513`  
+**Binary:** `0000 0010 0001 0000 0000 0101 0001 0011`  
+**Breakdown:**  
+- Immediate: `0000 0010 0001`  
+- RD: `00010` (a1)  
+- Opcode: `0110111`
+
+## 8. `addi a2, a2, 15`
+**Hex:** `0x00f00613`  
+**Binary:** `0000 0000 1111 0000 0000 0110 0001 0011`  
+**Breakdown:**  
+- Immediate: `0000 0000 1111`  
+- RS1: `00010` (a2)  
+- RD: `00010` (a2)  
+- Funct3: `000`  
+- Opcode: `0010011`
+
+## 9. `ret`
+**Hex:** `0x00008067`  
+**Binary:** `0000 0000 0000 0000 1000 0000 0110 0111`  
+**Breakdown:**  
+- RS1: `00001` (ra)  
+- RD: `00000`  
+- Funct3: `000`  
+- Opcode: `1100111`
+
+## 10. `j 101b0`
+**Hex:** `0x0ec0006f`  
+**Binary:** `0000 1110 1100 0000 0000 0000 0110 1111`  
+**Breakdown:**  
+- Immediate: `0000 1110 1100`  
+- Opcode: `1101111`
+
+## 11. `mv a1, a0`
+**Hex:** `0x00050593`  
+**Binary:** `0000 0000 0000 0101 0000 0101 1001 0011`  
+**Breakdown:**  
+- RS1: `00010` (a0)  
+- RD: `00010` (a1)  
+- Opcode: `0110011`
+
+## 12. `jal ra, 12ea4`
+**Hex:** `0x4cd020ef`  
+**Binary:** `0100 1100 1101 0000 0010 0000 1110 1111`  
+**Breakdown:**  
+- Immediate: `0100 1100 1101`  
+- RD: `00001` (ra)  
+- Opcode: `1101111`
+
+## 13. `li a3, 0`
+**Hex:** `0x00000613`  
+**Binary:** `0000 0000 0000 0000 0000 0110 0001 0011`  
+**Breakdown:**  
+- Immediate: `0000 0000 0000`  
+- RS1: `00000`  
+- RD: `00011` (a3)  
+- Funct3: `000`  
+- Opcode: `0010011`
+
+## 14. `add a0, a0, 316`
+**Hex:** `0x13c50513`  
+**Binary:** `0001 0011 1100 0101 0000 0101 0001 0011`  
+**Breakdown:**  
+- Immediate: `0001 0011 1100`  
+- RS1: `00010` (a0)  
+- RD: `00010` (a0)  
+- Funct3: `000`  
+- Opcode: `0010011`
+
+## 15. `sd s0, 0(sp)`
+**Hex:** `0x00013423`  
+**Binary:** `0000 0000 0000 0001 0011 0100 0010 0011`  
+**Breakdown:**  
+- Immediate: `0000 0000 0000`  
+- RS1: `00010` (sp)  
+- RS2: `00010` (s0)  
+- Funct3: `011`  
+- Opcode: `0100011`
