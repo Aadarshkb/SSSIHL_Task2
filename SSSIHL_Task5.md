@@ -15,18 +15,14 @@ Jumper Wires
 
 The SMART ULTRASONIC PROXIMITY DETECTOR WITH LED ALERT is built using essential electronic components to ensure accurate distance measurement and quick response. The VSD SQUADRON MINI, powered by the CH32V003F4U6 microcontroller with a 32-bit RISC-V core (RV32EC instruction set), serves as the brain of the system, handling sensor data and controlling outputs efficiently. The HC-SR04 ultrasonic sensor is used to detect object proximity by measuring the time delay between transmitted and received sound waves. A breadboard provides a flexible platform for assembling the circuit without soldering, while jumper wires ensure seamless electrical connections between the components. Together, these components create a fast, reliable, and responsive proximity detection system suitable for automation and safety applications.
 
+**CIRCUIT DIAGRAM**
 ![image](https://github.com/user-attachments/assets/3fe53937-70c1-43bb-baf0-d0c62ba70e68)
 
 **Table for Pin connection:**
 
 HC-SRO4 sensor to CH32V003x
 
-HC-SRO4 sensor	CH32V003x Pin
-VCC             	5 volts
-GND	                ground
-TRIGGER	            PD2
-ECHO	            PD5
-LED	                PD6
+![image](https://github.com/user-attachments/assets/8c92cb09-4e25-43d8-bfb3-9955fb2bd207)
 
 
 **WORKING OF THE CODE**
