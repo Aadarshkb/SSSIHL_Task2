@@ -1,82 +1,90 @@
-Task 5:
+**Task 5:**
 
 
-Full Adder Circuit Implementation Using RISC-V Assembly
+**Overview**
+This project uses an ultrasonic sensor to measure distance and control an LED based on object proximity. The TRIG_PIN sends a pulse, while the ECHO_PIN measures the reflection time to calculate distance. If an object is within 10 cm, the LED turns ON instantly; otherwise, it remains OFF. The use of pulseIn() ensures fast and accurate measurements, while a 30ms timeout prevents delays, making the system highly responsive.
 
-## Overview
-A **full adder** is a combinational logic circuit that performs binary addition of three inputs: two operands (**A** and **B**) and a carry-in (**Cin**). This document presents the full adder's implementation using **RISC-V assembly language**.
+This system is useful for object detection, obstacle avoidance, and safety applications. It can be implemented in robotics, smart parking systems, automated doors, and security alarms to detect nearby objects and trigger actions accordingly. The fast response ensures real-time decision-making, making it ideal for critical applications. The project runs on the CH32V003F4U6 microcontroller, which features a 32-bit RISC-V core based on the RV32EC instruction set, ensuring efficient performance and low power consumption.
 
-## Truth Table
+**COMPONENTS REQUIRED TO BUILD SMART ULTRASONIC PROXIMITY DETECTOR WITH LED ALERT:**
 
-| A | B | Cin | Sum | Cout |
-|---|---|-----|-----|------|
-| 0 | 0 |  0  |  0  |  0   |
-| 0 | 0 |  1  |  1  |  0   |
-| 0 | 1 |  0  |  1  |  0   |
-| 0 | 1 |  1  |  0  |  1   |
-| 1 | 0 |  0  |  1  |  0   |
-| 1 | 0 |  1  |  0  |  1   |
-| 1 | 1 |  0  |  0  |  1   |
-| 1 | 1 |  1  |  1  |  1   |
+VSD SQUADRON MINI (CH32V003F4U6 chip with 32-bit RISC-V core based on RV32EC instruction set)
+HC-SRO4 sensor
+Bread Board
+Jumper Wires
 
-## Logical Expressions
+The SMART ULTRASONIC PROXIMITY DETECTOR WITH LED ALERT is built using essential electronic components to ensure accurate distance measurement and quick response. The VSD SQUADRON MINI, powered by the CH32V003F4U6 microcontroller with a 32-bit RISC-V core (RV32EC instruction set), serves as the brain of the system, handling sensor data and controlling outputs efficiently. The HC-SR04 ultrasonic sensor is used to detect object proximity by measuring the time delay between transmitted and received sound waves. A breadboard provides a flexible platform for assembling the circuit without soldering, while jumper wires ensure seamless electrical connections between the components. Together, these components create a fast, reliable, and responsive proximity detection system suitable for automation and safety applications.
 
-- **Sum** = A ⊕ B ⊕ Cin
-- **Cout** = (A & B) | (Cin & (A ⊕ B))
+![image](https://github.com/user-attachments/assets/3fe53937-70c1-43bb-baf0-d0c62ba70e68)
 
-## RISC-V Assembly Code
+**Table for Pin connection:**
 
-```assembly
-.section .data
-A:     .word 1  # First input bit
-B:     .word 1  # Second input bit
-Cin:   .word 1  # Carry input
-Sum:   .word 0  # Sum output
-Cout:  .word 0  # Carry output
+HC-SRO4 sensor to CH32V003x
 
-.section .text
-.global _start
+HC-SRO4 sensor	CH32V003x Pin
+VCC             	5 volts
+GND	                ground
+TRIGGER	            PD2
+ECHO	            PD5
+LED	                PD6
 
-_start:
-    # Load values of A, B, and Cin
-    la a0, A
-    lw a1, 0(a0)  # Load A into a1
-    la a0, B
-    lw a2, 0(a0)  # Load B into a2
-    la a0, Cin
-    lw a3, 0(a0)  # Load Cin into a3
 
-    # Compute Sum (A XOR B XOR Cin)
-    xor a4, a1, a2  # a4 = A XOR B
-    xor a5, a4, a3  # a5 = A XOR B XOR Cin
-    la a0, Sum
-    sw a5, 0(a0)    # Store Sum
+**WORKING OF THE CODE**
 
-    # Compute Cout ((A & B) | (Cin & (A XOR B)))
-    and a6, a1, a2  # a6 = A & B
-    and a7, a3, a4  # a7 = Cin & (A XOR B)
-    or t0, a6, a7   # t0 = Cout
-    la a0, Cout
-    sw t0, 0(a0)    # Store Cout
+The code utilizes an ultrasonic sensor to measure the distance to an object and control an LED based on that distance. In the setup() function, the necessary pins are configured: TRIG_PIN (PD2) for sending the trigger pulse, ECHO_PIN (PD5) for receiving the reflected echo, and LED_PIN (PD6) to control the LED. In the loop() function, the TRIG_PIN sends a pulse to the ultrasonic sensor, causing it to emit an ultrasonic wave. The ECHO_PIN then listens for the echo and measures the time it takes for the wave to return. This duration is converted into a distance using the speed of sound. If the distance is less than 10 cm, the LED_PIN is set HIGH, turning on the LED; otherwise, it is set LOW to turn the LED off. This process repeats every 500 milliseconds, continuously monitoring the distance and adjusting the LED based on proximity. This setup can be used for proximity sensing, such as in obstacle detection or distance measurement applications.
 
-    # Exit program
-    li a7, 10       # syscall exit
-    ecall
-```
 
-## Execution Instructions
-1. **Assemble the code:**
-   ```sh
-   riscv64-unknown-elf-as -o full_adder.o full_adder.s
-   ```
-2. **Link the object file:**
-   ```sh
-   riscv64-unknown-elf-ld -o full_adder full_adder.o
-   ```
-3. **Run the program on a RISC-V emulator or board:**
-   ```sh
-   qemu-riscv64 full_adder
-   ```
+**PROGRAMMING CODE**
 
-## Summary
-This program demonstrates a **full adder circuit** using **RISC-V assembly**, performing binary addition with carry propagation efficiently.
+#include <Arduino.h>
+
+#define TRIG_PIN PD2  
+#define ECHO_PIN PD5  
+#define LED_PIN  PD6
+#define LED PC0
+
+void setup() {
+    pinMode(TRIG_PIN, OUTPUT);
+    pinMode(ECHO_PIN, INPUT);
+    pinMode(LED_PIN, OUTPUT);
+    pinMode (LED,OUTPUT);
+}
+
+void loop() {
+    uint16_t duration;
+    int distance;
+
+    // Send trigger pulse
+    digitalWrite(TRIG_PIN, LOW);
+    delayMicroseconds(2);
+    digitalWrite(TRIG_PIN, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(TRIG_PIN, LOW);
+
+    // Wait for Echo pin (with timeout)
+    unsigned long startTime = millis();
+    while (digitalRead(ECHO_PIN) == LOW) {
+        if (millis() - startTime > 100) return;  // Exit if timeout
+    }
+
+    // Measure Echo duration
+    duration = 0;
+    while (digitalRead(ECHO_PIN) == HIGH) {
+        duration++;
+        delayMicroseconds(1);
+    }
+
+    // Convert to distance (integer math)
+    distance = (duration * 34) / 2000;
+
+    // LED logic
+    if (distance > 0 && distance < 10) {
+        digitalWrite(LED_PIN, LOW);
+        digitalWrite (LED, HIGH);
+    } else {
+        digitalWrite(LED_PIN, HIGH);
+        digitalWrite (LED,LOW);
+
+    }
+
+    delay(500);
